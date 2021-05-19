@@ -33,7 +33,6 @@ import TipoComunicacion from './TipoComunicacion';
 import GestionEmpleados from './GestionEmpleados';
 import Home from './Home';
 import Perfil from './Perfil';
-import Calendario from './Calendario';
 
 import blueGrey from '@material-ui/core/colors/blueGrey';
 
@@ -188,15 +187,6 @@ function MenuAdministrador() {
                         <ListItemText primary={"Mi Perfil"}/>
                     </ListItem>
 
-                    <Link to="/calendario" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <EventIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Calendario"}/>
-                        </ListItem>
-                    </Link>
-
                     <Divider />
                     <Link to="/gestionEmpleados" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
                         <ListItem button>
@@ -247,12 +237,6 @@ function MenuAdministrador() {
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                             <Perfil />
-                    </main>
-                </Route>
-                <Route exact path="/calendario">
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                            <Calendario />
                     </main>
                 </Route>
                 <Route exact path="/gestionEmpleados">

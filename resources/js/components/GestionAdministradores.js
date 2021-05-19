@@ -15,7 +15,6 @@ function generarPassword() {
     return randomstring;
 }
 
-
 function GestionAdministradores() {
 
     //Errores
@@ -40,11 +39,10 @@ function GestionAdministradores() {
         document.title = "Gestión Administradores";
         axios.get(baseURL + 'ListarAdministradores').then(response => {
             setData(response.data)
+        }).catch(error => {
+            setErrorMessages(["Error al cargar los datos"])
+            setIserror(true)
         })
-            .catch(error => {
-                setErrorMessage(["Cannot load user data"])
-                setIserror(true)
-            })
     }, []) // Este array vacío representa una lista vacía de dependencias
 
     //field tiene que coincidir con el campo de la base de datos
@@ -63,17 +61,25 @@ function GestionAdministradores() {
         { title: 'Creado', field: 'created_at', editable: 'never' },
         { title: 'Modificado', field: 'updated_at', editable: 'never' },
     ]);
+
     //Añadir administradores
     const handleRowAdd = (newData, resolve) => {
         //validation
-        if (newData.name === undefined || newData.apellidos === undefined) {
+        if (newData.name == null || newData.apellidos == null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Los campos no pueden ser null',
+            })
+        }
+        if (newData.name.length == 0 || newData.apellidos.length == 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Los campos no pueden estar vacíos',
             })
         }
-        if (validarEmail(newData.email) === false) {
+        if (!validarEmail(newData.email)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -104,56 +110,62 @@ function GestionAdministradores() {
             }
 
         }).catch(error => {
-            //console.log(error.response);
-            // console.log(error.response.data.message);
-            setErrorMessages(["Cannot add data. Server error!"])
+            setErrorMessages(["No se pudo añadir. Server error!"])
             setIserror(true)
             resolve()
         })
-
     }
     //Actualizar campos
     const handleRowUpdate = (newData, oldData, resolve) => {
-        if (newData.name === '' || newData.apellidos === '') {
+        let errores = [];
+
+        if (newData.name == '' || newData.apellidos == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Los campos no puede estar vacíos',
             })
+            errores.push("Error al actualizar campo");
+            setData([...data]);
+            resolve();
         }
-        if (validarEmail(newData.email) === false) {
+        if (!validarEmail(newData.email)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Introduce un correo válido',
             })
+            errores.push("Error al actualizar campo");
             setData([...data]);
-            resolve()
+            resolve();
         }
-        axios.put(baseURL + 'ModificarAdministrador/' + newData.id, newData).then(response => {
-            if (response.data.message == 'Este administrador ya existe') {
-                Swal.fire({
-                    icon: 'error',
-                    text: response.data.message
-                })
-                setData([...data]);
+        if (errores.length < 1) {
+            axios.put(baseURL + 'ModificarAdministrador/' + newData.id, newData).then(response => {
+                if (response.data.message == 'Este administrador ya existe') {
+                    Swal.fire({
+                        icon: 'error',
+                        text: response.data.message
+                    })
+                    setData([...data]);
+                    resolve()
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        text: response.data.message
+                    })
+                    const dataUpdate = [...data];
+                    const index = oldData.tableData.id;
+                    dataUpdate[index] = newData;
+                    setData([...dataUpdate]);
+                    resolve()
+                }
+            }).catch(error => {
+                setErrorMessages(["Actualización fallida! Server error!"])
+                setIserror(true)
                 resolve()
-            } else {
-                Swal.fire({
-                    icon: 'success',
-                    text: response.data.message
-                })
-                const dataUpdate = [...data];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
-                setData([...dataUpdate]);
-                resolve()
-            }
-        }).catch(error => {
-            setErrorMessages(["Cannot add data. Server error!"])
-            setIserror(true)
-            resolve()
-        })
+            })
+        }
+        
     }
     //Eliminar datos de la tabla
     const handleRowDelete = (oldData, resolve) => {
@@ -164,7 +176,7 @@ function GestionAdministradores() {
             setData([...dataDelete]);
             resolve()
         }).catch(error => {
-            setErrorMessages(["Delete failed! Server error"])
+            setErrorMessages(["Borrado fallido! Server error"])
             setIserror(true)
             resolve()
         })
@@ -178,6 +190,7 @@ function GestionAdministradores() {
             options={{
                 exportButton: true,
                 headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50]},
+                tableLayout : 'auto'
             }}
             localization={{
                 body: {
@@ -229,6 +242,5 @@ function GestionAdministradores() {
     )
 
 }
-
 
 export default GestionAdministradores;

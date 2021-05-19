@@ -33,15 +33,21 @@ function Comunicaciones() {
         document.title = "Comunicaciones";
         axios.get(baseURL + 'ListarComunicaciones').then(response => {
             setData(response.data)
+        }).catch(error => {
+            setErrorMessages(["Error al cargar los datos"])
+            setIserror(true)
         })
-            .catch(error => {
-                setErrorMessages(["Cannot load user data"])
-                setIserror(true)
-            })
     }, []) // Este array vacío representa una lista vacía de dependencias, solo cuando se monta el componente de ahí a qué deba estar vacío
 
     //Actualizar campos
     const handleRowUpdate = (newData, oldData, resolve) => {
+        if (newData.estado == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El estado no puede estar vacío',
+            })
+        }
         axios.put(baseURL + 'ModificarComunicacion/' + newData.id, newData).then(response => {
             if (response.data.message == 'Ha ocurrido un error al actualizar un campo.') {
                 Swal.fire({
@@ -61,18 +67,14 @@ function Comunicaciones() {
                 setData([...dataUpdate]);
                 resolve()
             }
-
+        }).catch(error => {
+            setErrorMessages(["No se ha podido actualizar."])
+            setIserror(true)
+            resolve()
         })
-            .catch(error => {
-                setErrorMessages(["Update failed! Server error"])
-                setIserror(true)
-                resolve()
-
-            })
     }
 
     return (
-
         <MaterialTable
             title="Comunicaciones"
             columns={columns}
@@ -80,6 +82,7 @@ function Comunicaciones() {
             options={{
                 exportButton: true,
                 headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50] },
+                tableLayout : 'auto'
             }}
             localization={{
                 pagination: {

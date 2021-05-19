@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MaterialTable from 'material-table';
 import axios from 'axios';
 import blueGrey from '@material-ui/core/colors/blueGrey';
+import { size } from 'lodash';
 
 //Usando Hook (sin clases)
 
@@ -9,7 +10,7 @@ function Departamento() {
 
     //field tiene que coincidir con el campo de la base de datos
     const [columns, setColumns] = useState([
-        { title: 'Id', field: 'id', editable: 'never' },
+        { title: 'Id', field: 'id', hidden: true },
         { title: 'Departamento', field: 'departamento' },
 
     ]);
@@ -33,17 +34,16 @@ function Departamento() {
         document.title = "Departamentos";
         axios.get(baseURL + 'ListarDepartamentos').then(response => {
             setData(response.data)
+        }).catch(error => {
+            setErrorMessages(["Error al cargar los datos"])
+            setIserror(true)
         })
-            .catch(error => {
-                setErrorMessages(["Cannot load user data"])
-                setIserror(true)
-            })
     }, []) // Este array vacío representa una lista vacía de dependencias, solo cuando se monta el componente de ahí a qué deba estar vacío
 
     //Añadir departamento
     const handleRowAdd = (newData, resolve) => {
         //validation
-        if (newData.departamento === undefined) {
+        if (newData.departamento == null || newData.departamento.length == 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -70,22 +70,20 @@ function Departamento() {
                 dataToAdd.push(newData); //añade el nuevo valor al array
                 setData(dataToAdd);
                 resolve()
-                location.reload(); //refresca la página
+                //window.location.reload(); //refresca la página
                 /*setData([...data, newData]);
                 resolve()*/
             }
-
+          
+        }).catch(error => {
+            setErrorMessages(["No se pudo añadir. Server error!"])
+            setIserror(true)
+            resolve()
         })
-            .catch(error => {
-                setErrorMessages(["Cannot add data. Server error!"])
-                setIserror(true)
-                resolve()
-            })
-
     }
     //Actualizar campos
     const handleRowUpdate = (newData, oldData, resolve) => {
-        if (newData.departamento === '') {
+        if (newData.departamento == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -98,7 +96,7 @@ function Departamento() {
                     icon: 'error',
                     text: response.data.message
                 })
-               setData([...data]);
+                setData([...data]);
                 resolve()
             } else {
                 Swal.fire({
@@ -112,13 +110,12 @@ function Departamento() {
                 resolve()
             }
 
-        })
-            .catch(error => {
-                setErrorMessages(["Update failed! Server error"])
-                setIserror(true)
-                resolve()
+        }).catch(error => {
+            setErrorMessages(["Actualización fallida! Server error"])
+            setIserror(true)
+            resolve()
 
-            })
+        })
     }
     //Eliminar datos de la tabla
     const handleRowDelete = (oldData, resolve) => {
@@ -128,23 +125,23 @@ function Departamento() {
             dataDelete.splice(index, 1);
             setData([...dataDelete]);
             resolve()
+        }).catch(error => {
+            setErrorMessages(["Borrado fallido! Server error"])
+            setIserror(true)
+            resolve()
         })
-            .catch(error => {
-                setErrorMessages(["Delete failed! Server error"])
-                setIserror(true)
-                resolve()
-            })
     }
 
     return (
-
         <MaterialTable
             title="Gestión de Departamentos"
             columns={columns}
             data={data}
             options={{
                 exportButton: true,
-                headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50]},
+                headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50] },
+                tableLayout : 'auto',
+                
             }}
             localization={{
                 body: {
@@ -158,7 +155,7 @@ function Departamento() {
                     }
                 },
                 header: {
-                    actions: 'Acciones'
+                    actions: 'Acciones',
                 },
                 pagination: {
                     labelRowsSelect: 'Filas',
@@ -196,7 +193,6 @@ function Departamento() {
     )
 
 }
-
 
 export default Departamento;
 

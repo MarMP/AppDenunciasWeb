@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -47,6 +46,7 @@ Route::post('perfil', 'ChangePasswordController@store')->name('change.password')
 /**
  * Permite actualizar las páginas del menú sin dar error
  */
+
 //Route::view('/{path?}', 'welcome');
 Route::view('/home', 'inicioAdmin');
 Route::view('/home', 'inicioSuperAdmin');

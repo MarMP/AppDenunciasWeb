@@ -33,7 +33,7 @@
                 background-color: #343a40;
                 background: url("../images/fondo.jpg") no-repeat center center;
                 background-size: cover;
-                padding-top: 18rem;
+                padding-top: 14rem;
                 padding-bottom: 8rem;
                 font-family: 'Copperplate', 'Copperplate Gothic Light';
             }

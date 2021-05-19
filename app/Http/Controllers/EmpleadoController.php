@@ -107,7 +107,6 @@ class EmpleadoController extends Controller
                 'message' => 'Este empleado ya existe'
             ];
         }
-
         return response()->json([
             'empleado' => $empleados,
             'message' => 'Empleado actualizado correctamente'

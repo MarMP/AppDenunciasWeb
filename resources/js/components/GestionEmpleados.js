@@ -33,11 +33,10 @@ function GestionEmpleados() {
         document.title = "Empleados";
         axios.get(baseURL + 'ListarEmpleados').then(response => {
             setData(response.data)
+        }).catch(error => {
+            setErrorMessages(["Error al cargar los datos"])
+            setIserror(true)
         })
-            .catch(error => {
-                setErrorMessage(["Cannot load user data"])
-                setIserror(true)
-            })
     }, []) // Este array vacío representa una lista vacía de dependencias
 
     //field tiene que coincidir con el campo de la base de datos
@@ -49,7 +48,8 @@ function GestionEmpleados() {
         {
             title: 'Departamento',
             field: 'id_departamento',
-            lookup: { 1: 'Marketing', 2: 'Desarrollo', 3: 'Soporte' },
+            lookup: { 1: 'Marketing', 2: 'Desarrollo', 3: 'Soporte', 5: 'Comercial', 6: 'Gerencia', 7: 'Recursos Humanos',
+                        8: 'Compras', 9: 'Logística y Seguridad', 10: 'Sistemas y Tecnología' },
         },
         { title: 'Puesto', field: 'puesto' },
         { title: 'Email', field: 'email', initialEditValue: 'example@email.com' },
@@ -59,14 +59,21 @@ function GestionEmpleados() {
     //Añadir comunicaciones
     const handleRowAdd = (newData, resolve) => {
         //validation
-        if (newData.nombre === undefined || newData.apellidos === undefined|| newData.id_departamento === undefined) {
+        if (newData.nombre == null  || newData.apellidos == null || newData.id_departamento == null) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Los campos no pueden estar vacíos',
             })
         }
-        if (validarEmail(newData.email) === false) {
+        if (newData.nombre.length == 0 || newData.apellidos.length == 0 || newData.id_departamento.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Los campos no pueden estar vacíos',
+            })
+        }
+        if (!validarEmail(newData.email)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -89,64 +96,65 @@ function GestionEmpleados() {
                 setData([...data, newData]);
                 resolve()
                 location.reload(); //refresca la página
-                /*let dataToAdd = [...data];
-                dataToAdd.push(newData); //añade el nuevo valor al array
-                setData(dataToAdd);*/
-                /*setData([...data, newData]);
-                resolve()*/
             }
 
         }).catch(error => {
-                //console.log(error.response);
-                // console.log(error.response.data.message);
-                setErrorMessages(["Cannot add data. Server error!"])
-                setIserror(true)
-                resolve()
-            })
-
+            setErrorMessages(["No se pudo añadir. Server error!"])
+            setIserror(true)
+            resolve()
+        })
     }
     //Actualizar campos
     const handleRowUpdate = (newData, oldData, resolve) => {
-        if (newData.nombre === '' || newData.apellidos === '' || newData.id_departamento === '') {
+        let errores = [];
+
+        if (newData.nombre == '' || newData.apellidos == '' || newData.id_departamento == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Los campos no puede estar vacíos',
             })
+            errores.push("Error al actualizar el dato");
+            setData([...data]);
+            resolve()
         }
-        if (validarEmail(newData.email) === false) {
+        if (!validarEmail(newData.email)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Introduce un correo válido',
             })
+            errores.push("Error al actualizar el dato");
             setData([...data]);
             resolve()
         }
-        axios.put(baseURL + 'ModificarEmpleado/' + newData.id, newData).then(response => {
-            if (response.data.message == 'Este empleado ya existe') {
-                Swal.fire({
-                    icon: 'error',
-                    text: response.data.message
-                })
-                setData([...data]);
+        if(errores.length < 1){ //No hay errores
+            axios.put(baseURL + 'ModificarEmpleado/' + newData.id, newData).then(response => {
+                if (response.data.message == 'Este empleado ya existe') {
+                    Swal.fire({
+                        icon: 'error',
+                        text: response.data.message
+                    })
+                    setData([...data]);
+                    resolve()
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        text: response.data.message
+                    })
+                    const dataUpdate = [...data];
+                    const index = oldData.tableData.id;
+                    dataUpdate[index] = newData;
+                    setData([...dataUpdate]);
+                    resolve()
+                }
+            }).catch(error => {
+                setErrorMessages(["Actualización fallida! Server error!"])
+                setIserror(true)
                 resolve()
-            } else {
-                Swal.fire({
-                    icon: 'success',
-                    text: response.data.message
-                })
-                const dataUpdate = [...data];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
-                setData([...dataUpdate]);
-                resolve()
-            }
-        }).catch(error => {
-            setErrorMessages(["Cannot add data. Server error!"])
-            setIserror(true)
-            resolve()
-        })
+            })
+        }
+   
     }
     //Eliminar datos de la tabla
     const handleRowDelete = (oldData, resolve) => {
@@ -157,7 +165,7 @@ function GestionEmpleados() {
             setData([...dataDelete]);
             resolve()
         }).catch(error => {
-            setErrorMessages(["Delete failed! Server error"])
+            setErrorMessages(["Borrado fallido! Server error"])
             setIserror(true)
             resolve()
         })
@@ -171,6 +179,7 @@ function GestionEmpleados() {
             options={{
                 exportButton: true,
                 headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50]},
+                tableLayout : 'auto'
             }}
             localization={{
                 body: {
@@ -222,6 +231,5 @@ function GestionEmpleados() {
     )
 
 }
-
 
 export default GestionEmpleados;

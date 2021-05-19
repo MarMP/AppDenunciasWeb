@@ -46,11 +46,11 @@ class MyResetPassword extends Notification
         return (new MailMessage)
                     ->subject('Recuperar contraseña')
                     ->greeting('¡Hola!')
-                    ->line('Se solicitó un restablecimiento de contraseña para tu cuenta ' . $notifiable->getEmailForPasswordReset() . ', haz clic en el botón que aparece a continuación para cambiar tu contraseña.')
+                    ->line('Se solicitó un restablecimiento de contraseña para tu cuenta de APPDenuncias con email: ' . $notifiable->getEmailForPasswordReset() . '. Haz clic en el botón que aparece a continuación para cambiar tu contraseña.')
                     ->action(('Cambiar contraseña'), route('password.reset', $this->token))
                     ->line('Este enlace solo es válido dentro de los proximos 60 minutos.')
                     ->line('Si tu no realizaste la solicitud de cambio de contraseña, ignora este mensaje.')
-                    ->salutation('Saludos, '. config('app.name'));
+                    ->salutation('Saludos, el equipo de APPDenuncias');
     }
 
     /**

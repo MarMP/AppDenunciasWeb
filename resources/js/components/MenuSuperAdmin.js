@@ -37,7 +37,7 @@ import GestionAdministradores from './GestionAdministradores';
 import Comunicaciones from './Comunicaciones';
 import Home from './Home';
 import Perfil from './Perfil';
-import Calendario from './Calendario';
+
 
 const drawerWidth = 240;
 
@@ -189,15 +189,6 @@ function MenuSuperAdmin() {
                         <ListItemText primary={"Mi Perfil"} />
                     </ListItem>
 
-                    <Link to="/calendario" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <EventIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Calendario"}/>
-                        </ListItem>
-                    </Link>
-
                     <Divider />
 
                     <Link to="/comunicaciones" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
@@ -268,13 +259,6 @@ function MenuSuperAdmin() {
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                             <Perfil />
-                    </main>
-                </Route>
-
-                <Route exact path="/calendario">
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                            <Calendario />
                     </main>
                 </Route>
 

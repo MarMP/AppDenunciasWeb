@@ -8,7 +8,7 @@ import blueGrey from '@material-ui/core/colors/blueGrey';
 function TipoComunicacion() {
     //field tiene que coincidir con el campo de la base de datos
     const [columns, setColumns] = useState([
-        { title: 'Id', field: 'id', editable: 'never' },
+        { title: 'Id', field: 'id', hidden: true },
         { title: 'Incidencia', field: 'incidencia'},
 
     ]);
@@ -32,26 +32,24 @@ function TipoComunicacion() {
         document.title = "Tipo comunicaciones";
         axios.get(baseURL + 'ListarTipoComunicaciones').then(response => {
             setData(response.data)
+        }).catch(error => {
+            setErrorMessages(["Error al cargar los datos"])
+            setIserror(true)
         })
-            .catch(error => {
-                setErrorMessages(["Cannot load user data"])
-                setIserror(true)
-            })
     }, []) // Este array vacío representa una lista vacía de dependencias, solo cuando se monta el componente de ahí a qué deba estar vacío
 
     //Añadir comunicaciones
     const handleRowAdd = (newData, resolve) => {
         //validation
-        if (newData.incidencia === undefined) {
+        if (newData.incidencia == null || newData.incidencia.length == 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'El campo incidencia no puede estar vacío',
+                text: 'El campo incidencia no puede estar vacía',
             })
             setData([...data]);
             resolve()
         }
-
         axios.post(baseURL + 'AnadirTipoComunicacion', newData).then(response => {
             if (response.data.message == 'Esta incidencia ya existe') {
                 Swal.fire({
@@ -69,27 +67,24 @@ function TipoComunicacion() {
                 dataToAdd.push(newData); //añade el nuevo valor al array
                 setData(dataToAdd);
                 resolve()
-                location.reload(); //refresca la página
+                //location.reload(); //refresca la página
                 /*setData([...data, newData]);
                 resolve()*/
             }
 
+        }).catch(error => {
+            setErrorMessages(["No se pudo añadir. Server error!"])
+            setIserror(true)
+            resolve()
         })
-            .catch(error => {
-                setErrorMessages(["Cannot add data. Server error!"])
-                setIserror(true)
-                resolve()
-            })
-
     }
     //Actualizar campos
     const handleRowUpdate = (newData, oldData, resolve) => {
-
-        if (newData.incidencia === '') {
+        if (newData.incidencia == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'El campo incidencia no puede estar vacío',
+                text: 'El campo incidencia no puede estar vacía',
             })
         }
         axios.put(baseURL + 'ModificarTipoComunicacion/' + newData.id, newData).then(response => {
@@ -112,13 +107,11 @@ function TipoComunicacion() {
                 resolve()
             }
 
+        }).catch(error => {
+            setErrorMessages(["Actualización fallida! Server error"])
+            setIserror(true)
+            resolve()
         })
-            .catch(error => {
-                setErrorMessages(["Update failed! Server error"])
-                setIserror(true)
-                resolve()
-
-            })
     }
     //Eliminar datos de la tabla
     const handleRowDelete = (oldData, resolve) => {
@@ -128,16 +121,14 @@ function TipoComunicacion() {
             dataDelete.splice(index, 1);
             setData([...dataDelete]);
             resolve()
+        }).catch(error => {
+            setErrorMessages(["Borrado fallido! Server error"])
+            setIserror(true)
+            resolve()
         })
-            .catch(error => {
-                setErrorMessages(["Delete failed! Server error"])
-                setIserror(true)
-                resolve()
-            })
     }
 
     return (
-
         <MaterialTable
             title="Gestión Tipos de Comunicación"
             columns={columns}
@@ -145,6 +136,7 @@ function TipoComunicacion() {
             options={{
                 exportButton: true,
                 headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50]},
+                tableLayout : 'auto'
             }}
             localization={{
                 body: {

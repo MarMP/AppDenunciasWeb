@@ -71,7 +71,9 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xl-9 mx-auto">
-                            <h1 class="mb-2 text-uppercase"><strong>Mantén tu empresa libre de conflictos</strong></h1>
+                            <h1 class="mb-2"><strong>Su bienestar es tu éxito</strong></h1>
+                            <h3 class="mb-2"><em>Conoce, escucha y entiende lo que tus empleados esperan de ti</em></h3>
+                            <hr class="bg-dark">
                         </div>
                     </div>
                 </div>
