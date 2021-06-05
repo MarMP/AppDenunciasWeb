@@ -40,9 +40,8 @@ function GestionEmpleados() {
     }, []) // Este array vacío representa una lista vacía de dependencias
 
     //field tiene que coincidir con el campo de la base de datos
-
     const [columns, setColumns] = useState([
-        { title: 'Id', field: 'id', editable: 'never'},
+        { title: 'Id', field: 'id', editable: 'never', searchable: false },
         { title: 'Nombre', field: 'nombre' },
         { title: 'Apellidos', field: 'apellidos' },
         {
@@ -53,7 +52,7 @@ function GestionEmpleados() {
         },
         { title: 'Puesto', field: 'puesto' },
         { title: 'Email', field: 'email', initialEditValue: 'example@email.com' },
-        { title: 'Teléfono', field: 'telefono' },
+        { title: 'Teléfono', field: 'telefono', searchable: false  },
     ]);
 
     //Añadir comunicaciones
@@ -172,6 +171,7 @@ function GestionEmpleados() {
     }
 
     return (
+        //Estilos y acciones para la tabla 
         <MaterialTable
             title="Gestión de Usuarios de la APP Móvil"
             columns={columns}

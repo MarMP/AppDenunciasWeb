@@ -8,12 +8,6 @@ function validarEmail(email) {
     const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
     return re.test(String(email).toLowerCase());
 }
-//Genera contraseñas aleatorias seguras
-//Math.random().toString(36).slice(-8);
-function generarPassword() {
-    var randomstring = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-    return randomstring;
-}
 
 function GestionAdministradores() {
 
@@ -48,7 +42,7 @@ function GestionAdministradores() {
     //field tiene que coincidir con el campo de la base de datos
 
     const [columns, setColumns] = useState([
-        { title: 'Id', field: 'id', editable: 'never' },
+        { title: 'Id', field: 'id', editable: 'never', searchable: false  },
         { title: 'Nombre', field: 'name' },
         { title: 'Apellidos', field: 'apellidos' },
         {
@@ -57,9 +51,8 @@ function GestionAdministradores() {
             lookup: { 1: 'Superadministrador', 2: 'Administrador' },
         },
         { title: 'Email', field: 'email', initialEditValue: 'example@email.com' },
-        //{ title: 'Password', field: 'password', initialEditValue: generarPassword() },
-        { title: 'Creado', field: 'created_at', editable: 'never' },
-        { title: 'Modificado', field: 'updated_at', editable: 'never' },
+        { title: 'Creado', field: 'created_at', editable: 'never', searchable: false  },
+        { title: 'Modificado', field: 'updated_at', editable: 'never', searchable: false  },
     ]);
 
     //Añadir administradores
@@ -183,6 +176,7 @@ function GestionAdministradores() {
     }
 
     return (
+        //Estilos y acciones para la tabla 
         <MaterialTable
             title="Gestión de Administradores de la APP Móvil"
             columns={columns}

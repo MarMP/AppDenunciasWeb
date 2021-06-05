@@ -5,7 +5,6 @@ const Home = props => {
         document.title = "Home";
     });
     return (
-
         <header className="masthead text-right">
             <div className="overlay"></div>
             <div className="container-fluid pl-5" >

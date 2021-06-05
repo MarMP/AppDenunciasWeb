@@ -102,11 +102,11 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header bg-dark">
-                                          <a class="collapsed card-link text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="true">
+                                          <a class="collapsed card-link text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="false">
                                             Cambiar Contraseña
                                           </a>
                                         </div>
-                                            <div id="collapseTwo" class="collapse show" data-parent="#accordion">
+                                            <div id="collapseTwo" class="collapse" data-parent="#accordion">
                                                 <form method="POST" action="{{ route('change.password') }}">
                                                     @csrf
 

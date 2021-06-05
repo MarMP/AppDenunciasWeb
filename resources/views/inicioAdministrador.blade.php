@@ -41,8 +41,7 @@
 
                 de fondo o si hay problemas para cargarla */
 
-                background-color: #66999;
-}
+                background-color: #D8D3D2;
             }
         </style>
     </head>

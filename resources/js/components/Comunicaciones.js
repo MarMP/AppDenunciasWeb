@@ -7,9 +7,9 @@ function Comunicaciones() {
     //field tiene que coincidir con el campo de la base de datos
     const [columns, setColumns] = useState([
         { title: 'Id', field: 'id', hidden: true },
-        { title: 'Empleado', field: 'empleado', editable: 'never' },
+        { title: 'Empleado', field: 'empleado', editable: 'never',  searchable: false },
         { title: 'Tipo de comunicación', field: 'tipo_comunicacion', editable: 'never' },
-        { title: 'Departamento', field: 'departamento', editable: 'never' },
+        { title: 'Departamento', field: 'departamento', editable: 'never',  searchable: false},
         { title: 'Comunicación del empleado', field: 'mensaje_comunicacion', editable: 'never', searchable: false, cellStyle: {overflow: "scroll"}},
         { title: 'Estado: Abierta/En proceso/Cerrada', field: 'estado', initialEditValue: 'Abierta' },
     ]);
@@ -75,6 +75,7 @@ function Comunicaciones() {
     }
 
     return (
+        //Estilos y acciones para la tabla 
         <MaterialTable
             title="Comunicaciones"
             columns={columns}
@@ -82,7 +83,7 @@ function Comunicaciones() {
             options={{
                 exportButton: true,
                 headerStyle: { position: 'sticky', top: 0, fontWeight: 'bold', backgroundColor: blueGrey[50] },
-                tableLayout : 'auto'
+                tableLayout : 'auto',
             }}
             localization={{
                 pagination: {

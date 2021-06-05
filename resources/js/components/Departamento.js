@@ -133,6 +133,7 @@ function Departamento() {
     }
 
     return (
+        //Estilos y acciones para la tabla 
         <MaterialTable
             title="Gestión de Departamentos"
             columns={columns}

@@ -19,7 +19,6 @@ class Empleado extends Model
         'puesto',
         'email',
         'telefono',
-        'foto_empleado',
         'password'
     ];
 }

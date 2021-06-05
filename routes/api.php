@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Rutas para manejar departamentos
+//Rutas para manejar Departamentos
 Route::get('ListarDepartamentos','DepartamentosController@index');
 Route::post('AnadirDepartamento','DepartamentosController@store');
 Route::put('ModificarDepartamento/{id}','DepartamentosController@update');

@@ -48,7 +48,6 @@ class EmpleadoController extends Controller
             'puesto'=> 'nullable|max:50',
             'email' => 'required',
             'telefono'=> 'nullable',
-            'foto_empleado' => 'nullable',
             'password' => $contrasena,
         ]);
 
@@ -63,7 +62,6 @@ class EmpleadoController extends Controller
                 'puesto'=> request('puesto'),
                 'email' => request('email'),
                 'telefono'=> request('telefono'),
-                'foto_empleado' => request('foto_empleado'),
                 'password' => bcrypt($contrasena),
             ]);
         } catch (PDOException $pdo) {
@@ -94,7 +92,6 @@ class EmpleadoController extends Controller
             'puesto'=> 'nullable|max:50',
             'email' => 'required',
             'telefono'=> 'nullable',
-            'foto_empleado' => 'nullable',
             'password' => 'required'
         ]);
 

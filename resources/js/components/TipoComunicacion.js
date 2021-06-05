@@ -129,6 +129,7 @@ function TipoComunicacion() {
     }
 
     return (
+        //Estilos y acciones para la tabla 
         <MaterialTable
             title="Gestión Tipos de Comunicación"
             columns={columns}

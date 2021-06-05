@@ -44,7 +44,7 @@ Route::get('perfil', 'ChangePasswordController@index');
 Route::post('perfil', 'ChangePasswordController@store')->name('change.password');
 
 /**
- * Permite actualizar las páginas del menú sin dar error
+ * Para actualizar las páginas del menú
  */
 
 //Route::view('/{path?}', 'welcome');
